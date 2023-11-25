@@ -1,24 +1,22 @@
 package com.project.controller;
 
-import com.project.view.StartView;
-
+import com.project.view.EditTaskView;
+import com.project.view.TaskListView;
+import com.project.view.TaskDetailView;
 import com.googlecode.lanterna.gui2.*;
-import com.googlecode.lanterna.input.KeyAdapter;
-import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
-
-public class StartViewController {
-    private StartView startView;
+public class TaskDetailController {
+    private TaskDetailView taskDetailView;
     private int selectedItemIndex = 0;
 
-    public StartViewController(StartView startView) {
-        this.startView = startView;
+    public TaskDetailController(TaskDetailView taskDetailView) {
+        this.taskDetailView = taskDetailView;
         initializeMenu();
     }
 
     public void initializeMenu() {
-        Panel panel = startView.getPanel();
+        Panel panel = taskDetailView.getPanel();
 
         panel.setFocusedInteractable((Interactable) panel.getComponent(selectedItemIndex)); // Ustawienie fokusu na pierwszym elemencie
 
@@ -39,7 +37,7 @@ public class StartViewController {
     private void moveSelection(int delta) {
         selectedItemIndex += delta;
 
-        Panel panel = startView.getPanel();
+        Panel panel = taskDetailView.getPanel();
         int maxIndex = panel.getComponentCount() - 1;
 
         if (selectedItemIndex < 0) {
@@ -52,41 +50,40 @@ public class StartViewController {
     }
 
     private void handleEnter() {
-        Panel panel = startView.getPanel();
+        Panel panel = taskDetailView.getPanel();
         Component selectedComponent = panel.getComponent(selectedItemIndex);
-        
-        if (selectedComponent instanceof Label) {
-            Label selectedLabel = (Label) selectedComponent;
-            String selectedOption = selectedLabel.getText();
-    
-            switch (selectedOption) {
-                case "\u25B6 Show your tasks":
-                    // Przekierowanie do widoku TaskListView
+
+        if (selectedComponent instanceof Button) {
+            Button selectedButton = (Button) selectedComponent;
+            String buttonText = selectedButton.getLabel();
+
+            switch (buttonText) {
+                case "Edit task":
+                    // Przejście do widoku edycji zadania (EditTaskView.java)
+                    EditTaskView editTaskView = new EditTaskView();
+                    break;
+                case "Exit":
+                    // Powrót do poprzedniego widoku (TaskListView.java)
                     TaskListView taskListView = new TaskListView();
-                    taskListView.displayTasks();
-                    break;
-                case "\u25B6 Add new Task":
-                    // Przekierowanie do widoku AddTaskView
-                    AddTaskView addTaskView = new AddTaskView();
-                    addTaskView.displayAddTaskForm();
-                    break;
-                case "\u25B6 Tasks History":
-                    // Przekierowanie do widoku HistoryView
-                    HistoryView historyView = new HistoryView();
-                    historyView.displayHistory();
-                    break;
-                case "\u25B6 Exit":
-                    // Zamknięcie aplikacji
-                    System.exit(0);
                     break;
                 default:
-                    System.out.println("Wybrano: " + selectedLabel.getText());
                     break;
             }
         }
     }
-    
-    
+    public static void goToEditTask() {
+        // Tutaj umieść logikę przechodzenia do widoku edycji zadania (EditTaskView.java)
+        EditTaskView editTaskView = new EditTaskView();
+        // Pamiętaj, że jeśli to potrzebne, możesz przekazać informacje o zadaniu do widoku edycji
+        editTaskView.displayEditTaskForm();
+    }
+
+    public static void goBackToTaskList() {
+        // Tutaj umieść logikę powrotu do poprzedniego widoku (TaskListView.java)
+        TaskListView taskListView = new TaskListView();
+        taskListView.displayTasks();
+    }
 }
-        
+
+
 
