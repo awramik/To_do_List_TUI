@@ -29,4 +29,8 @@ public class StartView {
     public Panel getPanel() {
         return panel;
     }
+
+    public WindowBasedTextGUI getTextGUI() {
+        return textGUI;
+    }
 }
